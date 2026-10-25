@@ -1,0 +1,19 @@
+# données téléchargées ou régénérées par la chaîne
+data/raw/
+data/interim/
+data/pgdata/
+data/postgresql.log
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# copie de la bibliothèque faite par 12_empaqueter_extension.py
+extension/etat_initial_qgis/etat_initial/
+
+# livrables volumineux : publiés en « release » GitHub plutôt que dans le dépôt
+livrables/03_Atlas/
+livrables/02_Donnees_SIG/etat_initial.gdb/
+livrables/07_Extension_QGIS/
+
+# fichiers de la release GitHub, préparés à part
+publication/

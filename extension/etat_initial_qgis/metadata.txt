@@ -1,0 +1,14 @@
+[general]
+name=État initial de l'environnement
+qgisMinimumVersion=3.28
+description=Produit l'état initial de l'environnement d'un projet à partir de son périmètre : données ouvertes, enjeux hiérarchisés, projet QGIS et atlas A3.
+about=À partir d'un polygone (zone d'implantation potentielle), l'algorithme calcule les aires d'étude, interroge une quarantaine de flux ouverts (IGN, INPN, BRGM, Géoportail de l'Urbanisme, GBIF, TAXREF, OCS GE), analyse les zonages, l'occupation du sol, l'urbanisme, les servitudes, le foncier, les risques et les espèces connues, propose une hiérarchisation des enjeux et compose un atlas A3 de 18 cartes. Fonctionne en France métropolitaine ; certaines couches régionales sont propres aux Hauts-de-France.
+version=1.0.0
+author=Jaurès DAA-HINGBANON
+homepage=https://github.com/jauresmas/etat-initial-douaisis
+repository=https://github.com/jauresmas/etat-initial-douaisis
+tracker=https://github.com/jauresmas/etat-initial-douaisis/issues
+category=Analysis
+tags=environnement,étude d'impact,état initial,atlas,urbanisme,biodiversité,OCS GE
+icon=icone.svg
+experimental=False

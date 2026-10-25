@@ -1,0 +1,195 @@
+{
+ "site": "Dépôt d'hydrocarbures de Courchelettes",
+ "commune": "Courchelettes",
+ "surface_ha": 3.86,
+ "nb_friches": 96,
+ "classes": {
+  "Exclu": 87,
+  "Défavorable": 8,
+  "Favorable": 1
+ },
+ "reconvertis": 15,
+ "plu": [
+  {
+   "zone": "UEpv",
+   "part": 0.976,
+   "intitule": "Secteur UEpv, destiné à accueillir les installations et équipements nécessaires à la création d'une centrale photovoltaïque"
+  },
+  {
+   "zone": "UAb",
+   "part": 0.023,
+   "intitule": "Zone urbaine mixte correspondant aux abords du centre-ville"
+  }
+ ],
+ "especes": {
+  "total": 395,
+  "protegees": 34,
+  "patrimoniales": 20
+ },
+ "enjeux": [
+  {
+   "theme": "Milieu physique et risques",
+   "sujet": "Eaux superficielles",
+   "niveau": "Modéré",
+   "justification": "Cours d'eau le plus proche « Dérivation de la Scarpe » à 46 m de la ZIP. Gestion des eaux pluviales et des pollutions de chantier à prévoir."
+  },
+  {
+   "theme": "Milieu physique et risques",
+   "sujet": "Eaux souterraines (remontées de nappe)",
+   "niveau": "Modéré",
+   "justification": "Zone potentiellement sujette aux débordements de nappe sur la ZIP (BRGM). Fondations des structures et stockage de produits à adapter."
+  },
+  {
+   "theme": "Milieu physique et risques",
+   "sujet": "Sols pollués",
+   "niveau": "Faible",
+   "justification": "Site pollué ou potentiellement pollué (instruction) « SIPC (Société Industrielle de produits chimique) » à 79 m de la ZIP. Le PLU signale 1 ancien(s) site(s) industriel(s) (BASIAS), dans l’aire immédiate. L'historique industriel du site justifie un diagnostic de pollution avant travaux (terrassements, gestion des déblais)."
+  },
+  {
+   "theme": "Milieu physique et risques",
+   "sujet": "Risques naturels et miniers (PPR)",
+   "niveau": "Nul",
+   "justification": "Aucun objet recensé dans l'aire rapprochée."
+  },
+  {
+   "theme": "Milieu physique et risques",
+   "sujet": "Risques technologiques (PPRT)",
+   "niveau": "Nul",
+   "justification": "Aucun objet recensé dans l'aire rapprochée."
+  },
+  {
+   "theme": "Milieu physique et risques",
+   "sujet": "Cavités et mouvements de terrain",
+   "niveau": "Nul",
+   "justification": "Aucun objet recensé dans l'aire rapprochée."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "Espèces connues (bibliographie)",
+   "niveau": "Fort",
+   "justification": "395 espèces observées depuis 2010 dans l'aire rapprochée (GBIF), dont 34 protégées et 20 patrimoniales (listes rouges, directives, déterminantes ZNIEFF), par exemple Goéland brun, Goéland argenté, Verdier d'Europe, Chardonneret élégant. Données opportunistes, non exhaustives : un inventaire sur un cycle biologique complet reste nécessaire."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "Boisements et haies",
+   "niveau": "Modéré",
+   "justification": "0,0 ha de formations boisées (BD Forêt) et 76 m de haies dans la ZIP. Habitats d'espèces (oiseaux nicheurs, chiroptères) : défrichement soumis à autorisation selon les seuils du code forestier."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "Végétation spontanée de la friche",
+   "niveau": "Modéré",
+   "justification": "64% de la ZIP en formations herbacées ou ligneuses hors agriculture (OCS GE 2024 et 2025). Les friches accueillent souvent une flore pionnière et des espèces de milieux ouverts (reptiles, insectes, oiseaux) : enjeu à préciser par les inventaires."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "ZNIEFF de type I",
+   "niveau": "Faible",
+   "justification": "ZNIEFF de type I 310013748 « Bassins de Brebières et bois du Grand marais » à 1,3 km de la ZIP (aire éloignée). Les espèces déterminantes de la ZNIEFF orientent les inventaires de terrain."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "Zones humides",
+   "niveau": "Faible",
+   "justification": "Zone à dominante humide la plus proche à 9 m (couche régionale). Pré-localisation seulement : la délimitation réglementaire (critères sol et végétation) se fait sur le terrain."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "Sites Natura 2000",
+   "niveau": "Nul",
+   "justification": "Aucun zonage dans l'aire éloignée."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "Protections réglementaires (réserves, arrêtés de biotope)",
+   "niveau": "Nul",
+   "justification": "Aucun zonage dans l'aire éloignée."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "ZNIEFF de type II",
+   "niveau": "Nul",
+   "justification": "Aucun zonage dans l'aire éloignée."
+  },
+  {
+   "theme": "Milieu naturel",
+   "sujet": "Parc naturel régional, conservatoire, Ramsar",
+   "niveau": "Nul",
+   "justification": "Aucun zonage dans l'aire éloignée."
+  },
+  {
+   "theme": "Paysage et patrimoine",
+   "sujet": "Bassin minier patrimoine mondial (bien inscrit)",
+   "niveau": "Faible",
+   "justification": "Bassin minier patrimoine mondial - Bien inscrit « Cités de la Clochette et Notre-Dame » à 4,3 km de la ZIP (aire éloignée). Covisibilités avec les éléments inscrits à étudier (photomontages depuis les points de vue)."
+  },
+  {
+   "theme": "Paysage et patrimoine",
+   "sujet": "Zone tampon du patrimoine mondial",
+   "niveau": "Faible",
+   "justification": "Bassin minier patrimoine mondial - Zone tampon à 4,2 km de la ZIP (aire éloignée). Insertion paysagère à justifier au regard de la valeur universelle exceptionnelle du bien."
+  },
+  {
+   "theme": "Paysage et patrimoine",
+   "sujet": "Monuments historiques (abords)",
+   "niveau": "Nul",
+   "justification": "Aucune servitude de ce type dans l'aire rapprochée (GPU)."
+  },
+  {
+   "theme": "Paysage et patrimoine",
+   "sujet": "Sites inscrits et classés",
+   "niveau": "Nul",
+   "justification": "Aucune servitude de ce type dans l'aire rapprochée (GPU)."
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Riverains",
+   "niveau": "Fort",
+   "justification": "28 bâtiments résidentiels dans l'aire immédiate, le plus proche en limite de la ZIP. Perceptions, éblouissement et nuisances de chantier à étudier."
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Prescriptions du PLU",
+   "niveau": "Modéré",
+   "justification": "Prescriptions dans la ZIP : constructibilité limitée (risques, nuisances, environnement) (1), information (1). "
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Servitudes d'utilité publique",
+   "niveau": "Modéré",
+   "justification": "Voie ferrée (dans la zip); Installation classée (servitude) (aire immédiate). Les gestionnaires (RTE, SNCF, etc.) sont à consulter sur les distances à respecter."
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Document d'urbanisme",
+   "niveau": "Faible",
+   "justification": "Zones du PLU sur la ZIP : UEpv (98%), UAb (2%). Le PLU destine déjà 98% du site à une centrale photovoltaïque ; le règlement du secteur fixe les règles à respecter (hauteur, clôtures, recul)."
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Agriculture",
+   "niveau": "Faible",
+   "justification": "0,0 ha de parcelles déclarées à la PAC (RPG 2024) dans la ZIP. Projet sans prélèvement de terres agricoles déclarées : sobriété foncière."
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Maîtrise foncière",
+   "niveau": "Faible",
+   "justification": "13 parcelles, 2 propriétaires ou groupes (Personne morale de droit privé, Propriétaire non diffusé) ; 0,0 ha de la ZIP appartiennent à des personnes publiques (DGFiP, personnes morales)."
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Réseaux et raccordement",
+   "niveau": "Faible",
+   "justification": "Ligne haute tension à 3,5 km de la ZIP. Le tracé et le coût du raccordement sont à étudier avec le gestionnaire de réseau."
+  },
+  {
+   "theme": "Milieu humain",
+   "sujet": "Effets cumulés avec d'autres projets",
+   "niveau": "Nul",
+   "justification": "Aucun parc photovoltaïque ni éolien recensé dans l'aire éloignée."
+  }
+ ],
+ "cartouche": "Étude indépendante réalisée à partir de données ouvertes, sans lien avec un porteur de projet.",
+ "auteur": "Jaurès DAA-HINGBANON"
+}
