@@ -47,6 +47,13 @@ Le criblage aboutit à une coïncidence frappante. Le PLU de Courchelettes class
 
 Les traitements ont été réalisés avec les outils de QGIS : tampons, jointure par plus proche voisin, intersections, statistiques par catégorie, mises en page et atlas. Trois modèles du modeleur graphique enchaînent les calculs clés (`livrables/02_Donnees_SIG/modeles/`, aussi intégrés au projet). Les mêmes traitements sont reproduits en Python : la chaîne relance toute l'étude en une commande, en sept minutes environ une fois les données téléchargées, et redonne les mêmes résultats. Un contrôle croisé ([`06b_modeles_qgis.py`](scripts/06b_modeles_qgis.py)) compare les deux voies : au plus 0,03 ha d'écart sur les aires d'étude, 0,3 m sur les distances des zonages et 0,01 ha sur les surfaces d'occupation du sol.
 
+<p align="center">
+<img src="docs/img/modele_aires_etude.png" width="32%" alt="Modèle QGIS : aires d'étude d'un projet">
+<img src="docs/img/modele_position_zonages.png" width="32%" alt="Modèle QGIS : position des zonages par rapport au projet">
+<img src="docs/img/modele_occupation_sol_par_aire.png" width="32%" alt="Modèle QGIS : occupation du sol par aire d'étude">
+</p>
+<p align="center"><i>Les trois modèles du modeleur graphique : aires d'étude, position des zonages, occupation du sol par aire.</i></p>
+
 1. **Référentiel territorial** ([`01_referentiel.py`](scripts/01_referentiel.py)). Il couvre Douaisis Agglo et une marge de 5 km : 36 couches, 65 000 objets, chargés dans PostGIS avec leur empreinte de contrôle.
 2. **Criblage** ([`03_criblage.sql`](sql/03_criblage.sql)). Chaque friche est exclue, pénalisée ou favorisée selon 17 critères. Le premier site retenu à l'origine était une plateforme logistique construite entre 2021 et 2025 : la photographie aérienne et l'OCS GE différentielle l'ont révélé. Le critère « site déjà reconverti », fondé sur l'usage OCS GE, est né de ce contrôle.
 

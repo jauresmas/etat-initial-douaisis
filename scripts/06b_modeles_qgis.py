@@ -11,7 +11,8 @@ trois modèles du modeleur graphique (fichiers .model3, aussi intégrés au proj
 
 La chaîne Python reproduit ces calculs pour relancer l'étude en une commande. Ce script fait
 tourner les modèles sur les données livrées et compare leurs résultats à ceux de Python ; le
-bilan (data/interim/controle_qgis_python.json) est repris dans la note méthodologique.
+bilan (data/interim/controle_qgis_python.json) est repris dans la note méthodologique. Le schéma
+de chaque modèle est exporté en image dans docs/img (README).
 """
 import json
 import os
@@ -26,6 +27,15 @@ from qgis.core import QgsApplication  # noqa: E402
 
 app = QgsApplication([], True)
 app.initQgis()
+from qgis.PyQt.QtCore import QCoreApplication, QTranslator  # noqa: E402
+from qgis.PyQt.QtGui import QFont  # noqa: E402
+
+_traduction = QTranslator()  # libellés du modeleur en français (« Entrée », « Sortie »)
+if _traduction.load("qgis_fr", QgsApplication.i18nPath()):
+    QCoreApplication.installTranslator(_traduction)
+_police = QFont("Segoe UI", 9)  # police de l'interface de QGIS sous Windows
+_police.setHintingPreference(QFont.PreferNoHinting)  # sinon les lettres s'espacent mal une fois agrandies
+app.setFont(_police)
 sys.path.insert(0, str(Path(QgsApplication.prefixPath()) / "python" / "plugins"))
 import processing  # noqa: E402
 from processing.core.Processing import Processing  # noqa: E402
@@ -36,7 +46,9 @@ from qgis.core import (QgsProcessing, QgsProcessingModelAlgorithm, QgsProcessing
                        QgsProcessingModelChildParameterSource as Source, QgsProcessingModelOutput,
                        QgsProcessingModelParameter, QgsProcessingParameterNumber,
                        QgsProcessingParameterVectorLayer, QgsProject, QgsVectorLayer)
-from qgis.PyQt.QtCore import QPointF  # noqa: E402
+from qgis.PyQt.QtCore import QPointF, QSizeF  # noqa: E402
+
+TAILLE = QSizeF(270, 50)  # boîtes assez larges pour des libellés sur deux lignes
 
 import config  # noqa: E402
 
@@ -55,15 +67,17 @@ def couche(nom):
 def parametre(modele, definition, x, y):
     composant = QgsProcessingModelParameter(definition.name())
     composant.setPosition(QPointF(x, y))
+    composant.setSize(TAILLE)
     modele.addModelParameter(definition, composant)
 
 
-def etape(modele, identifiant, algo, description, x, y, sources, sorties=None):
+def etape(modele, identifiant, algo, description, x, y, sources, sorties=None, sortie_xy=(300, 70)):
     """Ajoute un algorithme enfant ; sources : {paramètre: Source}, sorties : {nom: sortie de l'algorithme}."""
     enfant = QgsProcessingModelChildAlgorithm(algo)
     enfant.setChildId(identifiant)
     enfant.setDescription(description)
     enfant.setPosition(QPointF(x, y))
+    enfant.setSize(TAILLE)
     for nom, source in sources.items():
         enfant.addParameterSources(nom, [source])
     if sorties:
@@ -73,7 +87,8 @@ def etape(modele, identifiant, algo, description, x, y, sources, sorties=None):
             o.setDescription(nom)
             o.setChildOutputName(sortie)
             o.setChildId(identifiant)
-            o.setPosition(QPointF(x + 260, y + 45))
+            o.setPosition(QPointF(x + sortie_xy[0], y + sortie_xy[1]))
+            o.setSize(TAILLE)
             resultats[nom] = o
         enfant.setModelOutputs(resultats)
     modele.addChildAlgorithm(enfant)
@@ -83,9 +98,9 @@ def sortie_de(identifiant, nom="OUTPUT"):
     return Source.fromChildOutput(identifiant, nom)
 
 
-def distances(modele, x):
-    for nom, lib, val, y in (("immediate", "Aire immédiate (m)", 200, 50), ("rapprochee", "Aire rapprochée (m)", 1000, 110),
-                             ("eloignee", "Aire éloignée (m)", 5000, 170)):
+def distances(modele, x, y0=50):
+    for nom, lib, val, y in (("immediate", "Aire immédiate (m)", 200, y0), ("rapprochee", "Aire rapprochée (m)", 1000, y0 + 60),
+                             ("eloignee", "Aire éloignée (m)", 5000, y0 + 120)):
         parametre(modele, QgsProcessingParameterNumber(nom, lib, QgsProcessingParameterNumber.Double,
                                                        defaultValue=val, minValue=0), x, y)
 
@@ -95,16 +110,20 @@ def modele_aires():
     m = QgsProcessingModelAlgorithm("Aires d'étude d'un projet", GROUPE)
     parametre(m, QgsProcessingParameterVectorLayer("zip", "Zone d'implantation potentielle",
                                                    [QgsProcessing.TypeVectorPolygon], defaultValue=couche("projet")),
-              120, 50)
-    distances(m, 480)
+              150, 40)
+    # une rangée par aire : la distance à gauche du tampon qui l'utilise, la sortie à droite
+    for i, (nom, lib, val) in enumerate((("immediate", "Aire immédiate (m)", 200), ("rapprochee", "Aire rapprochée (m)", 1000),
+                                         ("eloignee", "Aire éloignée (m)", 5000))):
+        parametre(m, QgsProcessingParameterNumber(nom, lib, QgsProcessingParameterNumber.Double, defaultValue=val,
+                                                  minValue=0), 150, 190 + i * 190)
     for i, (aire, lib) in enumerate((("immediate", "Aire d'étude immédiate"), ("rapprochee", "Aire d'étude rapprochée"),
                                      ("eloignee", "Aire d'étude éloignée"))):
-        etape(m, f"tampon_{aire}", "native:buffer", f"Tampon : {lib.lower()}", 120 + i * 260, 260, {
+        etape(m, f"tampon_{aire}", "native:buffer", f"Tampon : {lib.lower()}", 520, 210 + i * 190, {
             "INPUT": Source.fromModelParameter("zip"),
             "DISTANCE": Source.fromModelParameter(aire),
             "SEGMENTS": Source.fromStaticValue(16),
             "DISSOLVE": Source.fromStaticValue(True),
-        }, {lib: "OUTPUT"})
+        }, {lib: "OUTPUT"}, sortie_xy=(370, 60))
     m.setHelpContent({"ALG_DESC": "Calcule les aires d'étude immédiate, rapprochée et éloignée autour de la zone "
                                   "d'implantation potentielle. Distances par défaut : centrale photovoltaïque au sol.",
                       "ALG_CREATOR": AUTEUR})
@@ -119,9 +138,9 @@ def modele_position():
               120, 50)
     parametre(m, QgsProcessingParameterVectorLayer("zip", "Zone d'implantation potentielle",
                                                    [QgsProcessing.TypeVectorPolygon], defaultValue=couche("projet")),
-              300, 50)
-    distances(m, 520)
-    etape(m, "proche", "native:joinbynearest", "Distance de chaque zonage à la ZIP", 200, 200, {
+              460, 50)
+    distances(m, 780, 250)
+    etape(m, "proche", "native:joinbynearest", "Distance de chaque zonage à la ZIP", 300, 200, {
         "INPUT": Source.fromModelParameter("zonages"),
         "INPUT_2": Source.fromModelParameter("zip"),
         "FIELDS_TO_COPY": Source.fromStaticValue(["fid"]),
@@ -129,7 +148,7 @@ def modele_position():
         "PREFIX": Source.fromStaticValue("zip_"),
         "NEIGHBORS": Source.fromStaticValue(1),
     })
-    etape(m, "position", "native:fieldcalculator", "Aire d'étude atteinte", 200, 320, {
+    etape(m, "position", "native:fieldcalculator", "Aire d'étude atteinte", 300, 420, {
         "INPUT": sortie_de("proche"),
         "FIELD_NAME": Source.fromStaticValue("position"),
         "FIELD_TYPE": Source.fromStaticValue(2),
@@ -154,14 +173,14 @@ def modele_occupation():
               120, 50)
     parametre(m, QgsProcessingParameterVectorLayer("aires", "Aires d'étude (champ « aire »)",
                                                    [QgsProcessing.TypeVectorPolygon], defaultValue=couche("aire_etude")),
-              400, 50)
-    etape(m, "decoupe", "native:intersection", "Découper l'occupation du sol par les aires", 260, 170, {
+              460, 50)
+    etape(m, "decoupe", "native:intersection", "Découper l'occupation du sol par les aires", 300, 180, {
         "INPUT": Source.fromModelParameter("ocsge"),
         "OVERLAY": Source.fromModelParameter("aires"),
         "INPUT_FIELDS": Source.fromStaticValue(["code_cs", "code_us"]),
         "OVERLAY_FIELDS": Source.fromStaticValue(["aire"]),
     })
-    etape(m, "surface", "native:fieldcalculator", "Surface de chaque morceau (ha)", 260, 280, {
+    etape(m, "surface", "native:fieldcalculator", "Surface de chaque morceau (ha)", 300, 300, {
         "INPUT": sortie_de("decoupe"),
         "FIELD_NAME": Source.fromStaticValue("surface_ha"),
         "FIELD_TYPE": Source.fromStaticValue(0),
@@ -169,7 +188,7 @@ def modele_occupation():
         "FIELD_PRECISION": Source.fromStaticValue(4),
         "FORMULA": Source.fromStaticValue("$area / 10000"),
     })
-    etape(m, "bilan", "qgis:statisticsbycategories", "Total par aire et par couverture", 260, 390, {
+    etape(m, "bilan", "qgis:statisticsbycategories", "Total par aire et par couverture", 300, 420, {
         "INPUT": sortie_de("surface"),
         "VALUES_FIELD_NAME": Source.fromStaticValue("surface_ha"),
         "CATEGORIES_FIELD_NAME": Source.fromStaticValue(["aire", "code_cs"]),
@@ -177,6 +196,40 @@ def modele_occupation():
     m.setHelpContent({"ALG_DESC": "Surface de chaque poste de couverture de l'OCS GE dans chaque aire d'étude "
                                   "(champ sum du tableau de sortie, en hectares).", "ALG_CREATOR": AUTEUR})
     return m
+
+
+# --- Schémas des modèles ----------------------------------------------------------------------------
+def exporter_schema(modele, chemin, echelle=2.0):
+    """Image du schéma, comme l'export du modeleur : sans boutons d'édition, liens redessinés en gris
+    lisible (le modeleur les trace dans une couleur très pâle)."""
+    from qgis.core import QgsProcessingContext
+    from qgis.gui import QgsModelGraphicsScene
+    from qgis.PyQt.QtCore import QRectF, Qt
+    from qgis.PyQt.QtGui import QColor, QImage, QPainter, QPen, QTransform
+    from qgis.PyQt.QtWidgets import QGraphicsPathItem
+    scene = QgsModelGraphicsScene()
+    scene.setFlag(QgsModelGraphicsScene.FlagHideControls, True)
+    scene.setFlag(QgsModelGraphicsScene.FlagHideComments, True)
+    scene.setModel(modele)
+    scene.createItems(modele, QgsProcessingContext())
+    rect = scene.itemsBoundingRect().adjusted(-30, -30, 30, 30)
+    liens = [it for it in scene.items() if isinstance(it, QGraphicsPathItem)]
+    chemins = [it.mapToScene(it.path()) for it in liens]
+    for it in liens:
+        it.setVisible(False)
+    img = QImage(int(rect.width() * echelle), int(rect.height() * echelle), QImage.Format_ARGB32)
+    img.fill(QColor("white"))
+    peintre = QPainter(img)
+    peintre.setRenderHint(QPainter.Antialiasing)
+    peintre.setRenderHint(QPainter.TextAntialiasing)
+    peintre.setTransform(QTransform().scale(echelle, echelle).translate(-rect.left(), -rect.top()))
+    peintre.setPen(QPen(QColor("#7d8592"), 1.4, Qt.SolidLine, Qt.RoundCap))
+    for c in chemins:  # les liens d'abord, sous les boîtes
+        peintre.drawPath(c)
+    peintre.resetTransform()
+    scene.render(peintre, QRectF(0, 0, img.width(), img.height()), rect)
+    peintre.end()
+    img.save(str(chemin))
 
 
 # --- Contrôle croisé QGIS / Python -----------------------------------------------------------------
@@ -264,7 +317,8 @@ def main():
         m.updateDestinationParameters()
         m.toFile(str(DOSSIER / fichier))
         modeles[cle] = m
-        print(f"Modèle : modeles/{fichier}")
+        exporter_schema(m, config.DOCS / "img" / f"modele_{Path(fichier).stem}.png")
+        print(f"Modèle : modeles/{fichier} (schéma dans docs/img)")
     bilan = controler(modeles)
     print(json.dumps(bilan, ensure_ascii=False))
     (config.TRAVAIL / "controle_qgis_python.json").write_text(json.dumps(bilan, ensure_ascii=False, indent=1),
